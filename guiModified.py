@@ -46,7 +46,7 @@ class UserInterfaceHIL(Frame):
         self.end_x = None
         self.end_y = None
 
-        self.im = PIL.Image.open("mosaic.jpg")
+        self.im = PIL.Image.open("output_image.png")
         self.wazil,self.lard=self.im.size
         self.canvas.config(scrollregion=(0,0,self.wazil,self.lard))
         self.tk_im = ImageTk.PhotoImage(self.im)
@@ -56,14 +56,14 @@ class UserInterfaceHIL(Frame):
         self.button = Button(master, text="Save visitation goals", command=self.on_update_button, width=70, height=4)
         # self.button.configure(width = 20, activebackground = "#33B5E5",relief = FLAT)
         self.button.place(x=495, y=675)
-        
+
         # button to choose whether or not to set points
         self.choosePtsButton = Button(master, text="Choose visitation goals", command=self.on_update_choosePtsButton, width=70, height=4)
         # move button to top right
-        # IMPORTANT: CHANGE THIS AND THE OTHER BUTTON TO NOT GET PLACED OVER IMAGE, DOING THIS BY UPDATING X AND 
+        # IMPORTANT: CHANGE THIS AND THE OTHER BUTTON TO NOT GET PLACED OVER IMAGE, DOING THIS BY UPDATING X AND
         # Y VALUES AS IMAGE DIMENSIONS CHANGE
         self.choosePtsButton.place(x=0, y=675)
-        
+
         # # Text input Box and button
         # self.entry = Entry(root, width=100)
         # self.entertextbutton = Button(text='Enter text', command=self.on_enter_text_button)
@@ -88,12 +88,12 @@ class UserInterfaceHIL(Frame):
             self.canvas.create_oval(self.start_x-5, self.start_y-5, self.start_x+5, self.start_y+5, fill='red')
             #adds it to list
             point = [ int(self.start_x),  int(self.start_y)]
-            #adds it to point list 
+            #adds it to point list
             #might be redundant might not be i dont want to fuck with it for the time being
             self.pointList.append(point)
-            
+
             a = len(self.pointList)
-            
+
             print(a)
             if (a > 1):
                 temp=self.pointList[(a-2)]
@@ -110,7 +110,7 @@ class UserInterfaceHIL(Frame):
 
 
         # save mouse drag start position
-    
+
 
     def on_move_press(self, event):
         curX = self.canvas.canvasx(event.x)
@@ -158,7 +158,7 @@ class UserInterfaceHIL(Frame):
 
         print("[INFO] Exiting the program")
         #exit()
-        
+
 ############  FUNCTION TO USE THE ADD POINTS BUTTON  ##################################################################
     def on_update_choosePtsButton(self):
         global clickedChoose
@@ -169,8 +169,8 @@ class UserInterfaceHIL(Frame):
         else:
             clickedChoose=1
 
-        
-        
+
+
 
 
 ######   M A I N    F U N C T I O N   ########################################################################################
@@ -178,7 +178,7 @@ class UserInterfaceHIL(Frame):
 if __name__ == "__main__":
 
     root=Tk()
-    root.title('Overhead Mosaic Image')
+    root.title('Two-Drone Search')
     #root.geometry("1920x1080")
 
     app = UserInterfaceHIL(root)
