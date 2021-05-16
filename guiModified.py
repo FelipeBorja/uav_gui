@@ -8,6 +8,7 @@ from PIL import Image
 from PIL import ImageTk
 from tkinter import *
 
+
 # Following class has the implementation for the User-interface
 class UserInterfaceHIL(Frame):
     def __init__(self,master):
@@ -18,7 +19,7 @@ class UserInterfaceHIL(Frame):
         clickedChoose = 0
         self.x = self.y = 0
         self.canvas = Canvas(self, cursor="cross")
-        self.canvas.config(width=1000, height=750)
+        self.canvas.config(width=700, height=700)
 
         self.pointList = []
 
@@ -36,7 +37,7 @@ class UserInterfaceHIL(Frame):
         self.sbarh.grid(row=1,column=0,sticky=E+W)
 
         self.canvas.bind("<ButtonPress-1>", self.on_button_press)
-        self.canvas.bind("<B1-Motion>", self.on_move_press)
+        # self.canvas.bind("<B1-Motion>", self.on_move_press)
         self.canvas.bind("<ButtonRelease-1>", self.on_button_release)
 
         # Rectangle drawing related code
@@ -46,23 +47,36 @@ class UserInterfaceHIL(Frame):
         self.end_x = None
         self.end_y = None
 
-        self.im = PIL.Image.open("output_image.png")
-        self.wazil,self.lard=self.im.size
-        self.canvas.config(scrollregion=(0,0,self.wazil,self.lard))
-        self.tk_im = ImageTk.PhotoImage(self.im)
-        self.imgArea = self.canvas.create_image(0,0,anchor="nw",image=self.tk_im)
+        # self.im = PIL.Image.open("output_image.png")
+        self.map = PIL.Image.open("output_image.png")
+        self.map = self.map.resize((490,500))
 
-        # button to finish and plan the path
-        self.button = Button(master, text="Save visitation goals", command=self.on_update_button, width=70, height=4)
-        # self.button.configure(width = 20, activebackground = "#33B5E5",relief = FLAT)
-        self.button.place(x=495, y=675)
+        self.width,self.height=self.map.size
+        print("Map Width: ", self.width)
+        print("Map Height: ", self.height)
+        # self.canvas.config(scrollregion=(0,0,self.wazil,self.lard))
+        self.tk_map = ImageTk.PhotoImage(self.map)
+        self.imapArea = self.canvas.create_image(0,0,anchor="nw",image=self.tk_map)
+
+
 
         # button to choose whether or not to set points
-        self.choosePtsButton = Button(master, text="Choose visitation goals", command=self.on_update_choosePtsButton, width=70, height=4)
-        # move button to top right
+        self.choosePtsButton = Button(master, text="Add Waypoint", command=self.on_update_choosePtsButton, width=25, height=3, bg = "light blue")
         # IMPORTANT: CHANGE THIS AND THE OTHER BUTTON TO NOT GET PLACED OVER IMAGE, DOING THIS BY UPDATING X AND
         # Y VALUES AS IMAGE DIMENSIONS CHANGE
-        self.choosePtsButton.place(x=0, y=675)
+        self.choosePtsButton.place(x=500, y=10)
+
+        self.deletePtButton = Button(master, text="Delete Waypoint", command=self.on_update_button, width=25, height=3, bg = "light blue")
+        self.deletePtButton.place(x=500, y=70)
+
+        # button to finish and plan the path
+        self.saveButton = Button(master, text="Save Waypoints", command=self.on_update_button, width=25, height=3, bg = "light blue")
+        # self.button.configure(width = 20, activebackground = "#33B5E5",relief = FLAT)
+        self.saveButton.place(x=500, y=130)
+
+
+        self.investigateButton = Button(master, text="Investigate", command=self.on_update_button, width=25, height=3, bg = "light blue")
+        self.investigateButton.place(x=500, y=190)
 
         # # Text input Box and button
         # self.entry = Entry(root, width=100)
@@ -84,8 +98,8 @@ class UserInterfaceHIL(Frame):
             #this records where the the mouse was clicked
             self.start_x = self.canvas.canvasx(event.x)
             self.start_y = self.canvas.canvasy(event.y)
-            #creates a red dot where the mouse was clicked
-            self.canvas.create_oval(self.start_x-5, self.start_y-5, self.start_x+5, self.start_y+5, fill='red')
+            #creates a green dot where the mouse was clicked
+            self.canvas.create_oval(self.start_x-5, self.start_y-5, self.start_x+5, self.start_y+5, fill='green')
             #adds it to list
             point = [ int(self.start_x),  int(self.start_y)]
             #adds it to point list
@@ -97,7 +111,7 @@ class UserInterfaceHIL(Frame):
             print(a)
             if (a > 1):
                 temp=self.pointList[(a-2)]
-                self.canvas.create_line(int(self.start_x), int(self.start_y), temp[0], temp[1])
+                self.canvas.create_line(int(self.start_x), int(self.start_y), temp[0], temp[1], fill="yellow")
                 print(int(self.start_x))
                 print(temp[0])
                 print(int(self.start_y))
@@ -112,19 +126,19 @@ class UserInterfaceHIL(Frame):
         # save mouse drag start position
 
 
-    def on_move_press(self, event):
-        curX = self.canvas.canvasx(event.x)
-        curY = self.canvas.canvasy(event.y)
-
-        w, h = self.canvas.winfo_width(), self.canvas.winfo_height()
-        if event.x > 0.9*w:
-            self.canvas.xview_scroll(1, 'units')
-        elif event.x < 0.1*w:
-            self.canvas.xview_scroll(-1, 'units')
-        if event.y > 0.9*h:
-            self.canvas.yview_scroll(1, 'units')
-        elif event.y < 0.1*h:
-            self.canvas.yview_scroll(-1, 'units')
+    # def on_move_press(self, event):
+    #     curX = self.canvas.canvasx(event.x)
+    #     curY = self.canvas.canvasy(event.y)
+    #
+    #     w, h = self.canvas.winfo_width(), self.canvas.winfo_height()
+    #     if event.x > 0.9*w:
+    #         self.canvas.xview_scroll(1, 'units')
+    #     elif event.x < 0.1*w:
+    #         self.canvas.xview_scroll(-1, 'units')
+    #     if event.y > 0.9*h:
+    #         self.canvas.yview_scroll(1, 'units')
+    #     elif event.y < 0.1*h:
+    #         self.canvas.yview_scroll(-1, 'units')
 
         # expand rectangle as you drag the mouse
         self.canvas.coords(self.rect, self.start_x, self.start_y, curX, curY)
@@ -179,7 +193,7 @@ if __name__ == "__main__":
 
     root=Tk()
     root.title('Two-Drone Search')
-    #root.geometry("1920x1080")
+    root.geometry("700x700")
 
     app = UserInterfaceHIL(root)
     app.pack()
